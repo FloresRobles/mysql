@@ -9,7 +9,7 @@
 %%% Note    : All MySQL code was written by Magnus Ahltorp, originally
 %%%           in the file mysql.erl - I just moved it here.
 %%%
-%%% Copyright (c) 2001-2004 Kungliga Tekniska Högskolan
+%%% Copyright (c) 2001-2004 Kungliga Tekniska Hï¿½gskolan
 %%% See the file COPYING
 %%%
 %%%
@@ -364,6 +364,10 @@ loop(State) ->
 		      "Unexpected MySQL data (num ~p) :~n~p",
 		      [Num, Packet]),
 	    loop(State);
+	     {mysql_recv, RecvPid, closed, _Reason} ->
+               mysql:log(State#state.log_fun, error, "p1_mysql_conn: "
+                          "Connection closed, exiting.", []),
+              close_connection(State);
 	close ->
 	    mysql:log(State#state.log_fun, error, "mysql_conn: "
 		      "Received close signal, exiting.", []),
